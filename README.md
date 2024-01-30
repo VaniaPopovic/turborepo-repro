@@ -1,81 +1,72 @@
-# Turborepo starter
+# Simple Turbo Repo reproducing the issue on windows
 
-This is an official starter Turborepo.
+1. Created from the simple nextjs example on the turbo website
 
-## Using this example
-
-Run the following command:
-
-```sh
-npx create-turbo@latest
+```bash
+ pnpm create next-app@latest repro-edge
 ```
 
-## What's inside?
+2. Added
 
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
+```ts
+export const runtime = "edge";
 ```
 
-### Develop
+to `web/app/layout.tsx` and `web/app/page.tsx`
 
-To develop all apps and packages, run the following command:
+3. Ran `pnpm run dev --filter web`
+4. Errors appear
+
+```bash
+
+repro-turbo on  main [!] via  v20.11.0 took 22s
+❯ pnpm run dev --filter web
+
+> repro-turbo@ dev C:\Users\fream\Desktop\Projects\repro-turbo
+> turbo dev "--filter" "web"
+
+
+Attention:
+Turborepo now collects completely anonymous telemetry regarding usage.
+This information is used to shape the Turborepo roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://turbo.build/repo/docs/telemetry
+
+• Packages in scope: web
+• Running dev in 1 packages
+• Remote caching disabled
+web:dev: cache bypass, force executing e6a8ad92b617a942
+web:dev:
+web:dev: > web@1.0.0 dev C:\Users\fream\Desktop\Projects\repro-turbo\apps\web
+web:dev: > next dev
+web:dev:
+web:dev:    ▲ Next.js 14.1.0
+web:dev:    - Local:        http://localhost:3000
+web:dev:
+web:dev:  ✓ Ready in 1800ms
+web:dev:  ○ Compiling / ...
+web:dev:  ✓ Compiled / in 2.6s (758 modules)
+web:dev:  ⨯ Internal error: TypeError: Cannot read properties of undefined (reading '')
+web:dev:     at resolveClientReference (../../node_modules/.pnpm/next@14.1.0_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.edge.development.js:53:55)
+web:dev:     at resolveModule (../../node_modules/.pnpm/next@14.1.0_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.edge.development.js:1588:35)
+web:dev:     at processFullRow (../../node_modules/.pnpm/next@14.1.0_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.edge.development.js:1648:25)
+web:dev:     at processBinaryChunk (../../node_modules/.pnpm/next@14.1.0_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.edge.development.js:1751:21)
+web:dev:     at progress (../../node_modules/.pnpm/next@14.1.0_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/react-server-dom-webpack/cjs/react-server-dom-webpack-client.edge.development.js:1819:17)
+web:dev: [TypeError: Cannot read properties of undefined (reading '')]
+web:dev:  ⨯ [TypeError: Cannot read properties of undefined (reading '')]
+web:dev:  ⨯ [TypeError: Cannot read properties of null (reading 'default')]
 
 ```
-cd my-turborepo
-pnpm dev
-```
 
-### Remote Caching
+5. Website shows
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+![image](./images/error.png)
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+> [!WARNING] **Note**: This only happens on windows, mac runs fine so does WSL. And this only happens in a monorepo setup, classic NextJS installation is fine
 
-```
-cd my-turborepo
-npx turbo login
-```
+**Windows Information for help**
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+OS Name: Microsoft Windows 11 Pro \
+OS Version: 10.0.22621 N/A Build 22621 \
+OS Manufacturer: Microsoft Corporation \
+OS Configuration: Standalone Workstation
